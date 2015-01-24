@@ -16,9 +16,9 @@
 	// Boxes
 	var boxColor = 0xeeeeee,
 		numberOfBoxes = 6,
-		boxWidth = 100,
+		boxWidth = 20,
 		boxHeight = 40,
-		boxDepth = 100;
+		boxDepth = 20;
 	var boxes = [];
 	var spreadArea = 800;
 
@@ -29,7 +29,7 @@
 		var box = new Physijs.BoxMesh(boxGeometry, boxMaterial)
 		box.position.set(
 			(Math.random()*spreadArea)-spreadArea/2, boxHeight/2, (Math.random()*spreadArea)-spreadArea/2);
-		box.position.y = 100;
+		box.position.y = 50;
 		box.castShadow = true;
 		boxes.push(box);
 		app.scene.add(box);

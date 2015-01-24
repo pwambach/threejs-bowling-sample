@@ -20,13 +20,11 @@
 
     // Light Move
     var lightMove = 0;
-
     function moveLight() {
         lightMove += 0.01;
         if (lightMove > 360) {
             lightMove = 0;
         }
-        console.log(lightMove);
         spotLight.position.x = Math.sin(lightMove) * 200;
         requestAnimationFrame(moveLight);
     }

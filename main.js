@@ -19,7 +19,7 @@
 
 
 	// WebGL Renderer
-	var renderer = new THREE.WebGLRenderer({antialias: true });
+	var renderer = new THREE.WebGLRenderer({antialias: false });
 	renderer.setClearColor(0xeeeeee, 1);
 	renderer.setSize(WIDTH, HEIGHT);
 	renderer.shadowMapEnabled = true;
@@ -27,8 +27,8 @@
 	renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
 	// Physijs Scene
-	scene = new Physijs.Scene({fixedTimeStep: 1 / 10 });
-	scene.setGravity(new THREE.Vector3(0,-1000,0));
+	scene = new Physijs.Scene();
+	scene.setGravity(new THREE.Vector3(0,-100,0));
 
 	// Camera
 	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -60,7 +60,7 @@
 
 	// Render loop
 	function render() {
-		//scene.simulate(); // run physics
+		scene.simulate(); // run physics
 	    renderer.render(scene, camera);
         requestAnimationFrame(render);
 	}

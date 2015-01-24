@@ -2,18 +2,18 @@
 (function(){
 
 	var color = 0x2222ee,
-		radius = 10,
+		radius = 20,
 		segments = 32,
 		rings = 32;
-		mass = undefined;
+		mass = 10;
 
 	// Sphere
-	var sphereMaterial = new THREE.MeshLambertMaterial({color: color, side: THREE.FrontSide});
+	var sphereMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: color, side: THREE.FrontSide}), 0.1, 0.5);
 	var sphereGeometry = new THREE.SphereGeometry(radius, segments, rings)
 	
 	var sphere = new Physijs.SphereMesh(sphereGeometry, sphereMaterial, mass);
 
-	sphere.position.y = 100;
+	sphere.position.y = 30;
 	sphere.castShadow = true;
 	sphere.setDamping(0.2, 0);
 	
