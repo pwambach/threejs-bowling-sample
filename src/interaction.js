@@ -18,6 +18,10 @@
     powerLine.visible = false;
     app.scene.add(powerLine);
 
+    var START_EVENT = Modernizr.touch ? 'touchstart mousedown' : 'mousedown';
+    var MOVE_EVENT = Modernizr.touch ? 'touchmove mousemove' : 'mousemove';
+    var END_EVENT = Modernizr.touch ? 'touchend mouseup' : 'mouseup';
+
 
     var changePowerLine = function() {
         if(character.position && powerPoint){
@@ -38,18 +42,17 @@
     };
 
     var mouseDownHandler = function(event) {
+        console.log("start");
         var intersects = getIntersectFromMouse(event, character);
         if (intersects[0]) {
             console.log("hit");
-            
             app.orbitControls.enabled = false;
-            app.container.on('mousemove touchmove', mouseMoveHandler);
-            app.container.on('mouseup touchend', mouseUpHandler);
+            app.container.on(MOVE_EVENT, mouseMoveHandler);
+            app.container.on(END_EVENT, mouseUpHandler);
         }
     };
 
     var mouseMoveHandler = function(event) {
-        console.log("move");
         var intersects = getIntersectFromMouse(event, app.ground);
         if (intersects[0]) {
             powerPoint = intersects[0].point;
@@ -59,8 +62,8 @@
     };
 
     var mouseUpHandler = function(event) {
-        app.container.off('mousemove touchmove', mouseMoveHandler);
-        app.container.off('mouseup touchend', mouseUpHandler);
+        app.container.off(MOVE_EVENT, mouseMoveHandler);
+        app.container.off(END_EVENT, mouseUpHandler);
         powerLine.visible = false;
         app.orbitControls.enabled = true;
 
@@ -68,7 +71,7 @@
         character.applyCentralImpulse(vector.negate().multiplyScalar(impulseScalar));
     };
 
-    app.container.on('touchstart', mouseDownHandler);
+    app.container.on('mousedown', mouseDownHandler);
 
 
     var drawPowerLine = function(){

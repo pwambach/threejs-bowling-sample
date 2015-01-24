@@ -55,7 +55,7 @@
 
 	    sphere.applyCentralForce(force);
 	};
-	requestAnimationFrame(movePlayer);
+	//requestAnimationFrame(movePlayer);
 
 
 
