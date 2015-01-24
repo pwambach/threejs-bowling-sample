@@ -9,6 +9,16 @@ var VIEW_ANGLE = 45,
     FAR = 10000;
 
 
+var raycaster = new THREE.Raycaster();
+
+
+Physijs.scripts.worker = '/bower_components/physijs/physijs_worker.js';
+Physijs.scripts.ammo = '/bower_components/physijs/examples/js/ammo.js';
+
+
+// Keyboard
+var kb = new Keyboard();
+
 
 
 // WebGL renderer
@@ -20,7 +30,9 @@ renderer.shadowMapSoft = true;
 renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
 // Scene
-var scene = new THREE.Scene();
+//var scene = new THREE.Scene();
+var scene = new Physijs.Scene({fixedTimeStep: 1 / 60 });
+
 
 // Camera
 var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -55,20 +67,24 @@ scene.add(gridHelper);
 var controls = new THREE.OrbitControls(camera);
 
 // Sphere
-var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x2222ee, side: THREE.DoubleSide});
+var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x2222ee, side: THREE.FrontSide});
 var radius = 10, segments = 32, rings = 32;
-var sphere = new THREE.Mesh(
+
+var sphere = new Physijs.SphereMesh(
    	new THREE.SphereGeometry(radius, segments, rings),
-   	sphereMaterial
+   	sphereMaterial,
+   	10
    );
-sphere.position.y = radius;
+
+sphere.position.y = 100;
 sphere.castShadow = true;
 scene.add(sphere);
 
 // Ground
-var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xeeeeee, side: THREE.FrontSide} );
-var plane = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 12 ), planeMaterial );
-plane.rotation.x = Math.PI / 2 + Math.PI;
+var planeMaterial = new THREE.MeshBasicMaterial( {color: 0xccccdd, side: THREE.FrontSide} );
+// var plane = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 12 ), planeMaterial );
+var plane = new Physijs.BoxMesh( new THREE.BoxGeometry( 1000, 1, 1000, 1,1,1 ), planeMaterial, 0 );
+// plane.rotation.x = Math.PI / 2 + Math.PI;
 plane.receiveShadow = true;
 scene.add(plane);
 
@@ -76,24 +92,24 @@ scene.add(plane);
 
 // Boxes
 var numberOfBoxes = 6;
-var boxWidth = 20;
-var boxHeight = 50;
-var boxDepth = 20;
+var boxWidth = 100;
+var boxHeight = 40;
+var boxDepth = 100;
 var boxes = [];
-var spreadArea = 300;
+var spreadArea = 800;
 var boxMaterial = new THREE.MeshLambertMaterial({color: 0xeeeeee, side: THREE.FrontSide});
 
 for(var i = 0; i < numberOfBoxes; i++) {
-	var box = new THREE.Mesh(new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth, 1, 1, 1), boxMaterial)
+	var box = new Physijs.BoxMesh(new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth, 1, 1, 1), boxMaterial)
 	box.position.set(
 		(Math.random()*spreadArea)-spreadArea/2,
 		boxHeight/2,
 		(Math.random()*spreadArea)-spreadArea/2);
+	box.position.y = 100;
 	box.castShadow = true;
 	boxes.push(box);
 	scene.add(box);
 };
-
 
 
 
@@ -111,9 +127,63 @@ function moveLight(){
 
 
 
+
+
+	
+
+scene.setGravity(new THREE.Vector3(0,-1000,0));
+sphere.setDamping(0.2, 0);
+
+var preventJump = false;
+var movePlayer = function(){
+	var speed = 4000;
+	var turnSpeed = 3;
+
+	// var velocity = sphere.getLinearVelocity();
+
+	var force = new THREE.Vector3(0,0,0);
+
+	if(kb.isUP()){
+		/*var rotation_matrix = new THREE.Matrix4().extractRotation(sphere.matrix);
+		var force_vector = new THREE.Vector3(0, 0, -speed).applyMatrix4(rotation_matrix);
+		sphere.setLinearVelocity(force_vector);*/
+		// sphere.setLinearVelocity(new THREE.Vector3(0,0,-100));
+		force.add(new THREE.Vector3(0,0,-speed));
+	}
+	if(kb.isDOWN()){
+		/*var rotation_matrix = new THREE.Matrix4().extractRotation(sphere.matrix);
+		var force_vector = new THREE.Vector3(0, 0, speed).applyMatrix4(rotation_matrix);
+		sphere.setLinearVelocity(force_vector);*/
+		// sphere.setLinearVelocity(new THREE.Vector3(0,0,100));
+		force.add(new THREE.Vector3(0,0,speed));
+	}
+	if(kb.isLEFT()){
+		// sphere.setAngularVelocity(new THREE.Vector3(0,turnSpeed,0));
+		// sphere.setLinearVelocity(new THREE.Vector3(-100,0,0));
+		force.add(new THREE.Vector3(-speed,0,0));
+	}
+	if(kb.isRIGHT()){
+		// sphere.setAngularVelocity(new THREE.Vector3(0,-turnSpeed,0));
+		// sphere.setLinearVelocity(new THREE.Vector3(100,0,0));
+		force.add(new THREE.Vector3(speed,0,0));
+	}
+
+	if(kb.isSPACE() && !preventJump){
+		preventJump = true;
+		setTimeout(function(){
+			preventJump = false;
+		}, 500);
+		sphere.applyCentralImpulse(new THREE.Vector3(0,4000,0));
+	}
+
+	sphere.applyCentralForce(force);
+}
+
+
 // render loop
 function render() {
-	// sphere.rotation.y += 0.01;
+	movePlayer();
+	scene.simulate(); // run physics
     renderer.render(scene, camera);
     requestAnimationFrame(render);
     moveLight();
@@ -121,37 +191,91 @@ function render() {
 $('#container').append(renderer.domElement); 
 render();
 
-	
 
 
-
-var moveForward = function(){
-	sphere.position.
-};
-
-var turnLeft = function(){
-	
-};
-
-var turnRight = function(){
-	
-};
-
-var moveBackward = function(){
-	
-};
-
-
-// interactions
-$('body').on('keydown', function(e){
+// helper
+$('body').on('keypress', function(e){
 	switch(e.keyCode){
-		case 38: moveForward(); break;
-		case 37: turnLeft(); break;
-		case 39: turnRight(); break;
-		case 40: moveBackward(); break;
-		case 32: 
+		case 49: 
 			axisHelper.visible = !axisHelper.visible;
 			gridHelper.visible = !gridHelper.visible;
 			break;
 	}
 });
+
+
+var mouse = new THREE.Vector2();
+var powerPoint;
+var powerLine;
+var powerLineGeometry = new THREE.Geometry();
+	powerLineGeometry.vertices.push(new THREE.Vector3(0,0,0));
+    powerLineGeometry.vertices.push(new THREE.Vector3(0,100,0));
+var powerLineMaterial = new THREE.LineBasicMaterial({
+        color: 0x0000ff
+    });
+var powerLine = new THREE.Line(powerLineGeometry, powerLineMaterial);
+powerLine.visible = false;
+var debugSphere = new THREE.Mesh(
+   	new THREE.SphereGeometry(5, 4, 4),
+   	sphereMaterial);
+debugSphere.position.x = 100;
+scene.add(powerLine);
+scene.add(debugSphere);
+
+var $container = $('#container');
+
+var changePowerLine = function(vector1, vector2){
+	powerLine.geometry.vertices[0] = vector1;
+	powerLine.geometry.vertices[1] = vector2;
+	powerLine.geometry.verticesNeedUpdate = true;
+};
+
+var getIntersetFromMouse = function(event, object){
+	mouse = new THREE.Vector2();
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+	raycaster.setFromCamera(mouse, camera);	
+	return raycaster.intersectObject(object);
+};
+
+
+var mouseMoveHandler = function(event){
+	powerLine.visible = true;
+	var intersects = getIntersetFromMouse(event, plane);
+	if(intersects[0]){
+		powerPoint = intersects[0].point;
+		changePowerLine(sphere.position, powerPoint);
+	}
+};
+
+var mouseUpHandler = function(event){
+	$container.off('mousemove', mouseMoveHandler);
+	$container.off('mouseup', mouseUpHandler);
+	powerLine.visible = false;
+	controls.enabled = true;
+
+	
+	debugSphere.position.copy(powerPoint.sub(sphere.position));
+	var vector = powerPoint.sub(sphere.position);
+	console.log(vector.length());
+
+	sphere.applyCentralImpulse(vector.negate().multiplyScalar(10));
+	// console.log(debugSphere);
+};
+
+var mouseDownHandler = function(event){
+	var intersects = getIntersetFromMouse(event, sphere);
+	if(intersects[0]){
+		console.log("hit");
+		controls.enabled = false;
+		$container.on('mousemove', mouseMoveHandler);
+		$container.on('mouseup', mouseUpHandler);
+	}
+
+};
+
+$container.on('mousedown', mouseDownHandler);
+
+
+
+
