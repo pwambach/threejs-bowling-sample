@@ -1,16 +1,21 @@
 (function() {
 
     //Ambient Light
-    var light = new THREE.AmbientLight(0x444444); // soft white light
+    var light = new THREE.AmbientLight(0x555555); // soft white light
     app.scene.add(light);
 
 
     // Point Light
     var spotLight = new THREE.SpotLight(0xcccccc);
-    // spotLight.position.set(new THREE.Vector3(50, 150, 200));
-    spotLight.position.y = 200;
+    spotLight.position.y = 550;
+    spotLight.position.z = 200;
     spotLight.castShadow = true;
-    spotLight.shadowDarkness = 0.1;
+    spotLight.shadowDarkness = 0.4;
+    spotLight.shadowCameraNear = 400;
+    spotLight.shadowCameraFar = 800;
+    spotLight.angle = Math.PI / 2;
+    spotLight.shadowCameraVisible = true;
+    spotLight.shadowCameraFov = 60;
     app.scene.add(spotLight);
 
     //Light Helper
@@ -26,8 +31,8 @@
             lightMove = 0;
         }
         spotLight.position.x = Math.sin(lightMove) * 200;
-        requestAnimationFrame(moveLight);
+        //requestAnimationFrame(moveLight);
     }
-    //moveLight();
+    moveLight();
 
 })();

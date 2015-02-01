@@ -6,7 +6,8 @@
     "lodash": "~2.4.1",
     "threejs": "r70",
     "physijs": "*",
-    "modernizr": "~2.8.3"
+    "modernizr": "~2.8.3",
+    "stats.js": "*"
   },
   "resolutions": {
     "threejs": "r70"

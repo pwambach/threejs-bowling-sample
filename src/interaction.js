@@ -1,6 +1,6 @@
 (function() {
 
-    var impulseScalar = 4;
+    var impulseScalar = 50;
 
     var $container = app.container;
     var character = app.character;
@@ -12,15 +12,25 @@
     powerLineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
     powerLineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
     var powerLineMaterial = new THREE.LineBasicMaterial({
-        color: 0x0000ff
+        color: 0x5555ff,
+        linewidth: 3
     });
     var powerLine = new THREE.Line(powerLineGeometry, powerLineMaterial);
     powerLine.visible = false;
     app.scene.add(powerLine);
 
-    var START_EVENT = Modernizr.touch ? 'touchstart mousedown' : 'mousedown';
-    var MOVE_EVENT = Modernizr.touch ? 'touchmove mousemove' : 'mousemove';
-    var END_EVENT = Modernizr.touch ? 'touchend mouseup' : 'mouseup';
+    var START_EVENT = Modernizr.touch ? 'touchstart' : 'mousedown';
+    var MOVE_EVENT = Modernizr.touch ? 'touchmove' : 'mousemove';
+    var END_EVENT = Modernizr.touch ? 'touchend' : 'mouseup';
+
+
+    var material = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.FrontSide} );
+    var geometry = new THREE.PlaneGeometry( 1000, 1000, 1,1 );
+    var plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = Math.PI / -2;
+    plane.position.y = 5;
+    plane.visible = false;
+    app.scene.add(plane);
 
 
     var changePowerLine = function() {
@@ -42,10 +52,8 @@
     };
 
     var mouseDownHandler = function(event) {
-        console.log("start");
         var intersects = getIntersectFromMouse(event, character);
         if (intersects[0]) {
-            console.log("hit");
             app.orbitControls.enabled = false;
             app.container.on(MOVE_EVENT, mouseMoveHandler);
             app.container.on(END_EVENT, mouseUpHandler);
@@ -53,9 +61,10 @@
     };
 
     var mouseMoveHandler = function(event) {
-        var intersects = getIntersectFromMouse(event, app.ground);
+        var intersects = getIntersectFromMouse(event, plane);
         if (intersects[0]) {
             powerPoint = intersects[0].point;
+            powerPoint.y = powerPoint.y + app.character.geometry.parameters.radius;
             changePowerLine();
             powerLine.visible = true;
         }
@@ -71,7 +80,7 @@
         character.applyCentralImpulse(vector.negate().multiplyScalar(impulseScalar));
     };
 
-    app.container.on('mousedown', mouseDownHandler);
+    app.container.on(START_EVENT, mouseDownHandler);
 
 
     var drawPowerLine = function(){

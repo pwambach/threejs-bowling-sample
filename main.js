@@ -19,7 +19,7 @@
 
 
 	// WebGL Renderer
-	var renderer = new THREE.WebGLRenderer({antialias: false });
+	var renderer = new THREE.WebGLRenderer({antialias: true });
 	renderer.setClearColor(0xeeeeee, 1);
 	renderer.setSize(WIDTH, HEIGHT);
 	renderer.shadowMapEnabled = true;
@@ -32,7 +32,8 @@
 
 	// Camera
 	var camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-	camera.position.z = 500;
+	camera.position.z = 550;
+	camera.position.x = 300;
 	camera.position.y = 250;
 	camera.lookAt(new THREE.Vector3(0,0,0));
 	scene.add(camera);
@@ -49,7 +50,6 @@
 
 	var spotLight = new THREE.PointLight(0xcccccc);
     spotLight.position.y = 1000;
-    //spotLight.castShadow = true;
     spotLight.angle = Math.PI/2;
     spotLight.shadowDarkness = 0.1;
     scene.add(spotLight);
