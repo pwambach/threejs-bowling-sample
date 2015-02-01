@@ -14,7 +14,7 @@
     spotLight.shadowCameraNear = 400;
     spotLight.shadowCameraFar = 800;
     spotLight.angle = Math.PI / 2;
-    spotLight.shadowCameraVisible = true;
+    spotLight.shadowCameraVisible = false;
     spotLight.shadowCameraFov = 60;
     app.scene.add(spotLight);
 
