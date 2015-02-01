@@ -1,6 +1,6 @@
 (function() {
 
-    var impulseScalar = 50;
+    var impulseScalar = 80;
 
     var $container = app.container;
     var character = app.character;
