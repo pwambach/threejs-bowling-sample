@@ -1,0 +1,24 @@
+{
+  "name": "threejsBowlingSample",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pwambach/threejs-bowling-sample.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/pwambach/threejs-bowling-sample/issues"
+  },
+  "devDependencies": {
+    "gulp": "~3.8.11",
+    "gulp-useref": "~1.1.1",
+    "gulp-copy": "0.0.2",
+    "gulp-gh-pages": "~0.4.0"
+  }
+}
