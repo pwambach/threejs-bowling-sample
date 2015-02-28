@@ -41,8 +41,8 @@ var Keyboard = function(){
 	    FAR = 10000;
 
 	//set up Physijs
-	Physijs.scripts.worker = '/physijs_worker.js';
-	Physijs.scripts.ammo = '/ammo.js';
+	Physijs.scripts.worker = 'physijs_worker.js';
+	Physijs.scripts.ammo = 'ammo.js';
 
 
 	// WebGL Renderer
