@@ -17,12 +17,12 @@ gulp.task('default', ['copy'], function () {
 
 
 gulp.task('copy', function(){
-	gulp.src(
-		'bower_components/physijs/examples/js/ammo.js'
-	).pipe(gulp.dest('dist/bower_components/physijs/examples/js'));
-	return gulp.src(
-		'bower_components/physijs/physijs_worker.js'
-	).pipe(gulp.dest('dist/bower_components/physijs'));
+	gulp.src('bower_components/physijs/examples/js/ammo.js')
+        .pipe(gulp.dest(''))
+        .pipe(gulp.dest('dist'));
+	return gulp.src('bower_components/physijs/physijs_worker.js')
+        .pipe(gulp.dest(''))
+        .pipe(gulp.dest('dist'));
 });
 
  

@@ -14,8 +14,8 @@
 	    FAR = 10000;
 
 	//set up Physijs
-	Physijs.scripts.worker = '/bower_components/physijs/physijs_worker.js';
-	Physijs.scripts.ammo = '/bower_components/physijs/examples/js/ammo.js';
+	Physijs.scripts.worker = 'physijs_worker.js';
+	Physijs.scripts.ammo = 'ammo.js';
 
 
 	// WebGL Renderer
