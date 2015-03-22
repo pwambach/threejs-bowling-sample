@@ -1,20 +1,22 @@
 
 (function(){
 
-	var color = 0x2222ee,
-		radius = 10,
-		segments = 32,
-		rings = 32;
+	var color = 0x61cbe3,
+		radius = 15,
+		segments = 24,
+		rings = 24;
 		mass = 10;
 
 	// Sphere
-	var sphereMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({color: color, side: THREE.FrontSide}), 1, 1);
+	var sphereMaterial = Physijs.createMaterial(new THREE.MeshBasicMaterial({color: color, side: THREE.FrontSide}), 1, 1);
 	var sphereGeometry = new THREE.SphereGeometry(radius, segments, rings)
 	
 	var sphere = new Physijs.SphereMesh(sphereGeometry, sphereMaterial, mass);
+	sphere.setLinearFactor(new THREE.Vector3( 0, 0, 0 )); // only move on X and Z axis
 
 	sphere.position.y = 30;
-	sphere.position.z = 200;
+	sphere.position.z = -200;
+	sphere.position.x = 200;
 	sphere.castShadow = true;
 	//sphere.setDamping(1, 1);
 	
@@ -45,7 +47,7 @@
 		*/
 
 
-	    var speed = 4000;
+/*	    var speed = 4000;
 	    var force = new THREE.Vector3(0, 0, 0);
 
 	    if (app.keyboard.isUP()) {
@@ -68,7 +70,7 @@
 	            preventJump = false;
 	        }, 500);
 	        sphere.applyCentralImpulse(new THREE.Vector3(0, speed, 0));
-	    }
+	    }*/
 
 	    if(sphere.position.y < -50){
 	    	sphere.position.y = 20;
@@ -79,8 +81,8 @@
 	    	sphere.__dirtyPosition = true;
 	    }
 
-	    sphere.applyCentralForce(force);
-	    requestAnimationFrame(movePlayer);
+	    //sphere.applyCentralForce(force);
+	    //requestAnimationFrame(movePlayer);
 	};
 	movePlayer();
 

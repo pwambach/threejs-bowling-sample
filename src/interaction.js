@@ -1,6 +1,6 @@
 (function() {
 
-    var impulseScalar = 80;
+    var impulseScalar = 40;
 
     var $container = app.container;
     var character = app.character;
@@ -9,7 +9,6 @@
     var mouse = new THREE.Vector2();
     var powerPoint;
     var powerLineGeometry = new THREE.Geometry();
-    powerLineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
     powerLineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
     var powerLineMaterial = new THREE.LineBasicMaterial({
         color: 0x5555ff,
@@ -25,7 +24,7 @@
 
 
     var material = new THREE.MeshBasicMaterial( {color: 0xcccccc, side: THREE.FrontSide} );
-    var geometry = new THREE.PlaneGeometry( 1000, 1000, 1,1 );
+    var geometry = new THREE.PlaneGeometry( 3000, 3000, 1,1 );
     var plane = new THREE.Mesh(geometry, material);
     plane.rotation.x = Math.PI / -2;
     plane.position.y = 5;

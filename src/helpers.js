@@ -3,11 +3,12 @@
     // Axis Helper
     var axisHelper = new THREE.AxisHelper(100);
     axisHelper.position.y = 20;
+    axisHelper.visible = false
     app.scene.add(axisHelper);
 
     // Grid Helper
-    var gridHelper = new THREE.GridHelper(100, 10);
-    // app.scene.add(gridHelper);
+    /*var gridHelper = new THREE.GridHelper(100, 10);
+    app.scene.add(gridHelper);*/
 
 
     // sho/hide helpers

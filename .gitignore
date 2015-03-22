@@ -2,5 +2,6 @@
 /bower_components
 /node_modules
 /dist
+/model
 ammo.js
 physijs_worker.js
